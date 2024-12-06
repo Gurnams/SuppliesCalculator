@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Party Supplies Calculator</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+		
+		.container {
+			width: 80%;
+			margin: 40px auto;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+		
+		.label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		
+		.input {
+			width: 100%;
+			height: 30px;
+			margin-bottom: 20px;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+		
+		.button {
+			width: 100%;
+			height: 40px;
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		
+		.button:hover {
+			background-color: #3e8e41;
+		}
+		
+		.result {
+			margin-top: 20px;
+		}
+		
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		
+		th, td {
+			border: 1px solid #ddd;
+			padding: 10px;
+			text-align: left;
+		}
+		
+		th {
+			background-color: #f0f0f0;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h2>Party Supplies Calculator</h2>
+<p>Calculate the total number of snacks plates, lunch/dinner plates, spoons, water cups, tea cups, and napkins required for a party.</p>
+<p>Each guest will use:</p>
+<ul>
+<li>1 snacks plate</li>
+<li>1 lunch/dinner plate</li>
+<li>2 spoons</li>
+<li>2 water cup</li>
+<li>1 tea cup</li>
+<li>2 Bowls</li>
+<li>2-4 napkins (average 3 napkins)</li>
+</ul>
+<p>30% of people will use each product 3 times</p>
+<p>10% wastage</p>
+<p>  
+15-30% of plastic cutlery is wasted due to single-use and disposal (EPA)
+</p>
+		
+		<label class="label">Number of Guests:</label>
+		<input type="number" id="guests" class="input">
+        <label class="label" for="extraUsage">Extra Usage Percentage (%):</label>
+        <input class="input" type="number" id="extraUsage" name="extraUsage">
+
+        <label class="label" for="wastage">Wastage Percentage (%):</label>
+        <input class="input" type="number" id="wastage" name="wastage">
+        
+		<button class="button" onclick="calculateSupplies()">Calculate Supplies</button>
+		
+        <p>According to various studies and estimates, here are some statistics on extra plastic cutlery wasted by guests due to single-use and disposal in parties or events:</p>
+<ul>
+<li>20-30% of guests take extra plastic cutlery (forks, knives, spoons) unnecessarily (WRAP)</li>
+<li>15-25% of plastic cutlery is wasted due to over-provisioning (EPA)</li>
+<li>10-20% of guests use multiple sets of plastic cutlery per event (Ocean Conservancy)</li>
+<li>5-15% of plastic cutlery is littered or discarded incorrectly (Keep America Beautiful)</li>
+</ul>
+<p>Breakdown of extra plastic cutlery wasted:</p>
+<table>
+<tr>
+<th>Type of Cutlery</th>
+<th>Extra Waste (%)</th>
+</tr>
+<tr>
+<td>Forks</td>
+<td>25-40%</td>
+</tr>
+<tr>
+<td>Knives</td>
+<td>20-35%</td>
+</tr>
+<tr>
+<td>Spoons</td>
+<td>15-30%</td>
+</tr>
+<tr>
+<td>Other (stirrers, straws)</td>
+<td>10-25%</td>
+</tr>
+</table>
+<p>Reasons for extra plastic cutlery waste:</p>
+<ul>
+<li>Over-provisioning by event organizers</li>
+<li>Guests taking extra cutlery unnecessarily</li>
+<li>Lack of awareness about plastic waste</li>
+<li>Inadequate waste management</li>
+</ul>
+<p>To reduce extra plastic cutlery waste:</p>
+<ul>
+<li>Implement reusable or biodegradable cutlery</li>
+<li>Provide cutlery only upon request</li>
+<li>Educate guests about plastic waste</li>
+<li>Monitor and adjust cutlery provision</li>
+</ul>
+<p>Sources:</p>
+<ul>
+<li>WRAP (Waste and Resources Action Programme)</li>
+<li>EPA (United States Environmental Protection Agency)</li>
+<li>Ocean Conservancy</li>
+<li>Keep America Beautiful</li>
+</ul>
+        
+		<div class="result" id="result">
+			<table>
+				<tr>
+					<th>Item</th>
+					<th>Quantity</th>
+				</tr>
+				<tr>
+					<td id="snacks-plates">Snacks Plates:</td>
+					<td id="snacks-plates-quantity"></td>
+				</tr>
+				<tr>
+					<td id="lunch-dinner-plates">Lunch/Dinner Plates:</td>
+					<td id="lunch-dinner-plates-quantity"></td>
+				</tr>
+				<tr>
+					<td id="spoons">Spoons:</td>
+					<td id="spoons-quantity"></td>
+				</tr>
+				<tr>
+					<td id="water-cups">Water Cups:</td>
+					<td id="water-cups-quantity"></td>
+				</tr>
+				<tr>
+					<td id="tea-cups">Tea Cups:</td>
+					<td id="tea-cups-quantity"></td>
+				</tr>
+				<tr>
+					<td id="napkins">Napkins:</td>
+					<td id="napkins-quantity"></td>
+				</tr>
+                <tr>
+					<td id="bowls">Bowls:</td>
+					<td id="bowls-quantity"></td>
+				</tr>
+				<tr>
+					<td id="total-supplies">Total Supplies:</td>
+					<td id="total-supplies-quantity"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<script>
+		function calculateSupplies() {
+			let guests = document.getElementById('guests').value;
+			const extraUsagePercentage = parseInt(document.getElementById("extraUsage").value) / 100;
+			const wastagePercentage = parseInt(document.getElementById("wastage").value) / 100;
+ 
+ 
+			if (guests === '') {
+				alert('Please enter the number of guests');
+				return;
+			}
+	
+			guests = parseInt(guests);
+	
+			let snacksPlates = Math.ceil(guests * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+			let lunchDinnerPlates = Math.ceil(guests * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+			let spoons = Math.ceil(guests * 2 * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+			let waterCups = Math.ceil(guests * 2 * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+			let teaCups = Math.ceil(guests * 1  * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+			let napkins = Math.ceil(guests * 3 * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+            let bowls = Math.ceil(guests * 2 * (1 + extraUsagePercentage) * (1 + wastagePercentage));
+			let totalSupplies = snacksPlates + lunchDinnerPlates + spoons + waterCups + teaCups + napkins + bowls;
+	
+			document.getElementById('snacks-plates-quantity').innerHTML = `${snacksPlates}`;
+			document.getElementById('lunch-dinner-plates-quantity').innerHTML = `${lunchDinnerPlates}`;
+			document.getElementById('spoons-quantity').innerHTML = `${spoons}`;
+			document.getElementById('water-cups-quantity').innerHTML = `${waterCups}`;
+			document.getElementById('tea-cups-quantity').innerHTML = `${teaCups}`;
+			document.getElementById('napkins-quantity').innerHTML = `${napkins}`;
+            document.getElementById('bowls-quantity').innerHTML = `${bowls}`;
+			document.getElementById('total-supplies-quantity').innerHTML = `${totalSupplies}`;
+		}
+	</script>
+</body>
+</html>
